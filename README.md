@@ -1,6 +1,8 @@
 # TextFieldSequenceFormatterManager
 Format textfield input sequentially giving a total of elements and a number of elements per group.
 
+:basketball::soccer::tennis:      -      :basketball::soccer::tennis:      -      :basketball::soccer::tennis:      -      :basketball::soccer::tennis:
+
 ## Requirements
 * ARC
 * iOS 8.0
