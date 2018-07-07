@@ -8,34 +8,33 @@
 
 import UIKit
 
-@objc public protocol TextFieldSequenceFormatterManagerDelegate: class {
-    func textFieldSequenceFormatterManager(_ textFieldSequenceFormatterManager: TextFieldSequenceFormatterManager, didCompletedFillWith text: String?)
-    
-    @objc optional func willDischargeTextFieldText(_ textFieldSequenceFormatterManager: TextFieldSequenceFormatterManager)
-}
-
 public class TextFieldSequenceFormatterManager: NSObject {
     
+    public typealias TextFieldHandler = (UITextField) -> Void
+    
     // MARK: - Private Properties
+    fileprivate let textField: UITextField
     fileprivate let nElements: Int
     fileprivate let nElementsPerGroup: Int
     fileprivate lazy var indexes: [Int] = self.calculateIndexes()
     fileprivate let nGroups: Int
     fileprivate var total: Int
     
-    // MARK: TextFieldSequenceFormatterManagerDelegate
-    public weak var delegate: TextFieldSequenceFormatterManagerDelegate?
-    
     // MARK: Public properties
     public var separator: Seperator = .space
+    public var filledSequenceHandler: TextFieldHandler?
+    public var dischargedSequenceHandler: TextFieldHandler?
     
-    public init(nElements: Int, nElementsPerGroup: Int) {
+    public init(textField: UITextField, nElements: Int, nElementsPerGroup: Int) {
+        self.textField = textField
         self.nElements = nElements
         self.nElementsPerGroup = nElementsPerGroup
         self.nGroups = Int((Double(self.nElements) / Double(self.nElementsPerGroup)).rounded(.toNearestOrAwayFromZero))
         self.total = self.nElements + nGroups - 1
         
         super.init()
+        
+        self.textField.delegate = self
     }
 }
 
@@ -72,10 +71,10 @@ extension TextFieldSequenceFormatterManager: UITextFieldDelegate {
         
         if range.location == total - 1 {
             if range.length == 0 {
-                delegate?.textFieldSequenceFormatterManager(self, didCompletedFillWith: textField.text)
+                filledSequenceHandler?(textField)
             }
             else {
-                delegate?.willDischargeTextFieldText?(self)
+                dischargedSequenceHandler?(textField)
             }
             
             return true
