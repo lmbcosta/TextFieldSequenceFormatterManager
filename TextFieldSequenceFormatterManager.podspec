@@ -36,6 +36,7 @@ s.framework = "UIKit"
 # 8
 s.source_files = "TextFieldSequenceFormatterManager/**/*.{swift}"
 
-
+# 9
+s.swift_version = "4.1"
 
 end
