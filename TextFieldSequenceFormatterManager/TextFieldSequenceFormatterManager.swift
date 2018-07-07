@@ -24,12 +24,12 @@ public class TextFieldSequenceFormatterManager: NSObject {
     fileprivate var total: Int
     
     // MARK: TextFieldSequenceFormatterManagerDelegate
-    weak var delegate: TextFieldSequenceFormatterManagerDelegate?
+    public weak var delegate: TextFieldSequenceFormatterManagerDelegate?
     
     // MARK: Public properties
-    var separator: Seperator = .space
+    public var separator: Seperator = .space
     
-    init(nElements: Int, nElementsPerGroup: Int) {
+    public init(nElements: Int, nElementsPerGroup: Int) {
         self.nElements = nElements
         self.nElementsPerGroup = nElementsPerGroup
         self.nGroups = Int((Double(self.nElements) / Double(self.nElementsPerGroup)).rounded(.toNearestOrAwayFromZero))
@@ -49,7 +49,7 @@ extension TextFieldSequenceFormatterManager {
     }
 }
 
-// MARK: - private Functions
+// MARK: - Private Functions
 extension TextFieldSequenceFormatterManager {
     fileprivate func calculateIndexes() -> [Int] {
         var spacesArray = [Int]()
@@ -64,11 +64,11 @@ extension TextFieldSequenceFormatterManager {
     }
 }
 
+// MARK: UITextFieldDelegate
 extension TextFieldSequenceFormatterManager: UITextFieldDelegate {
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         if range.location == total { return false }
-        
         
         if range.location == total - 1 {
             if range.length == 0 {
@@ -89,7 +89,3 @@ extension TextFieldSequenceFormatterManager: UITextFieldDelegate {
         return true
     }
 }
-
-
-
-
