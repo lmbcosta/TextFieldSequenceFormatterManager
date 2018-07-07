@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		49E5AD1B20F1112000AEA761 /* TextFieldSequenceFormatterManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 49E5AD1920F1111F00AEA761 /* TextFieldSequenceFormatterManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		49E5AD2220F111C100AEA761 /* TextFieldSequenceFormatterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E5AD2120F111C100AEA761 /* TextFieldSequenceFormatterManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		49E5AD1620F1111F00AEA761 /* TextFieldSequenceFormatterManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = TextFieldSequenceFormatterManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		49E5AD1920F1111F00AEA761 /* TextFieldSequenceFormatterManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextFieldSequenceFormatterManager.h; sourceTree = "<group>"; };
 		49E5AD1A20F1112000AEA761 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		49E5AD2120F111C100AEA761 /* TextFieldSequenceFormatterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldSequenceFormatterManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +50,7 @@
 			children = (
 				49E5AD1920F1111F00AEA761 /* TextFieldSequenceFormatterManager.h */,
 				49E5AD1A20F1112000AEA761 /* Info.plist */,
+				49E5AD2120F111C100AEA761 /* TextFieldSequenceFormatterManager.swift */,
 			);
 			path = TextFieldSequenceFormatterManager;
 			sourceTree = "<group>";
@@ -95,6 +98,7 @@
 				TargetAttributes = {
 					49E5AD1520F1111F00AEA761 = {
 						CreatedOnToolsVersion = 9.4.1;
+						LastSwiftMigration = 0940;
 					};
 				};
 			};
@@ -130,6 +134,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49E5AD2220F111C100AEA761 /* TextFieldSequenceFormatterManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +264,7 @@
 		49E5AD1F20F1112000AEA761 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -268,6 +274,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = TextFieldSequenceFormatterManager/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -276,6 +283,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = lmbcosta.TextFieldSequenceFormatterManager;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -284,6 +292,7 @@
 		49E5AD2020F1112000AEA761 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -293,6 +302,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = TextFieldSequenceFormatterManager/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
