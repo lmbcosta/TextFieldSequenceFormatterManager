@@ -13,33 +13,16 @@ public class TextFieldSequenceFormatterManager: NSObject {
     public typealias TextFieldHandler = (UITextField) -> Void
     
     // MARK: - Private Properties
-    fileprivate let textField: UITextField
-    fileprivate let nElements: Int
-    fileprivate let nElementsPerGroup: Int
-    fileprivate lazy var indexes: [Int] = self.calculateIndexes()
-    fileprivate let nGroups: Int
-    fileprivate var total: Int
+    fileprivate var dictionary = [UITextField: TextFieldSequenceFormatterInternalModel]()
     
     // MARK: Public properties
     public var separator: Seperator = .space
     public var filledSequenceHandler: TextFieldHandler?
     public var dischargedSequenceHandler: TextFieldHandler?
-    
-    public init(textField: UITextField, nElements: Int, nElementsPerGroup: Int) {
-        self.textField = textField
-        self.nElements = nElements
-        self.nElementsPerGroup = nElementsPerGroup
-        self.nGroups = Int((Double(self.nElements) / Double(self.nElementsPerGroup)).rounded(.toNearestOrAwayFromZero))
-        self.total = self.nElements + nGroups - 1
-        
-        super.init()
-        
-        self.textField.delegate = self
-    }
 }
 
 // MARK: Seperator Types
-extension TextFieldSequenceFormatterManager {
+public extension TextFieldSequenceFormatterManager {
     public enum Seperator: String {
         case slash = "/"
         case dash = "-"
@@ -49,42 +32,86 @@ extension TextFieldSequenceFormatterManager {
 }
 
 // MARK: - Private Functions
-extension TextFieldSequenceFormatterManager {
-    fileprivate func calculateIndexes() -> [Int] {
+fileprivate extension TextFieldSequenceFormatterManager {
+    func calculateIndexes(nElementsPerGroup: Int, total: Int) -> [Int] {
         var spacesArray = [Int]()
         
-        var i = Int(self.nElementsPerGroup)
+        var i = nElementsPerGroup
         while i < total {
             spacesArray.append(i)
-            i += Int(nElementsPerGroup) + 1
+            i += nElementsPerGroup + 1
         }
         
         return spacesArray
     }
 }
 
+// MARK: - Private Structs
+fileprivate extension TextFieldSequenceFormatterManager {
+    struct TextFieldSequenceFormatterInternalModel {
+        let nElements: Int
+        let nElementsPerGroup: Int
+        let filledSequenceHandler: TextFieldHandler?
+        let dischargedSequenceHandler: TextFieldHandler?
+        let separator: Seperator
+    }
+}
+
 // MARK: UITextFieldDelegate
 extension TextFieldSequenceFormatterManager: UITextFieldDelegate {
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        guard let value = dictionary[textField] else { return false }
+        
+        let nGroups = Int((Double(value.nElements) / Double(value.nElementsPerGroup)).rounded(.toNearestOrAwayFromZero))
+        let total = value.nElements + nGroups - 1
+        let indexes = calculateIndexes(nElementsPerGroup: value.nElementsPerGroup, total: total)
         
         if range.location == total { return false }
         
         if range.location == total - 1 {
             if range.length == 0 {
-                filledSequenceHandler?(textField)
+                value.filledSequenceHandler?(textField)
             }
             else {
-                dischargedSequenceHandler?(textField)
+                value.dischargedSequenceHandler?(textField)
             }
             
             return true
         }
         
         if indexes.contains(range.location) && range.length == 0 {
-            let newText = (textField.text ?? "") + separator.rawValue
+            let newText = (textField.text ?? "") + value.separator.rawValue
             textField.text = newText
         }
         
         return true
     }
+}
+
+// MARK: - Public Functions
+extension TextFieldSequenceFormatterManager {
+    public func setTextField(with entity: TextFieldSequenceFormatterEntity) {
+        entity.textField.delegate = self
+        let value = TextFieldSequenceFormatterInternalModel(nElements: entity.nElements, nElementsPerGroup: entity.nElementsPerGroup, filledSequenceHandler: entity.filledSequenceHandler, dischargedSequenceHandler: entity.dischargedSequenceHandler, separator: entity.separator)
+        dictionary[entity.textField] = value
+    }
+}
+
+// MARK: - TextFieldSequenceFormatterEntity
+public class TextFieldSequenceFormatterEntity {
+    init(textField: UITextField, nElements: Int, nElementsPerGroup: Int, filledSequenceHandler: TextFieldSequenceFormatterManager.TextFieldHandler?, dischargedSequenceHandler: TextFieldSequenceFormatterManager.TextFieldHandler?, separator: TextFieldSequenceFormatterManager.Seperator) {
+        self.textField = textField
+        self.nElements = nElements
+        self.nElementsPerGroup = nElementsPerGroup
+        self.filledSequenceHandler = filledSequenceHandler
+        self.dischargedSequenceHandler = dischargedSequenceHandler
+        self.separator = separator
+    }
+    
+    let textField: UITextField
+    let nElements: Int
+    let nElementsPerGroup: Int
+    let filledSequenceHandler: TextFieldSequenceFormatterManager.TextFieldHandler?
+    let dischargedSequenceHandler: TextFieldSequenceFormatterManager.TextFieldHandler?
+    let separator: TextFieldSequenceFormatterManager.Seperator
 }
