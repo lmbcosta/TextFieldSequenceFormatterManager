@@ -3,7 +3,7 @@ Format textfield input sequentially giving a total of elements and a number of e
 
 :basketball::soccer::tennis:      -      :basketball::soccer::tennis:      -      :basketball::soccer::tennis:      -      :basketball::soccer::tennis:
 
-[See demo](https://gfycat.com/WellinformedDisgustingBellfrog)
+[See demo](https://gfycat.com/IlliterateExaltedBobcat)
 
 ## Requirements
 * ARC
