@@ -19,6 +19,7 @@ public class TextFieldSequenceFormatterManager: NSObject {
     public var separator: Seperator = .space
     public var filledSequenceHandler: TextFieldHandler?
     public var dischargedSequenceHandler: TextFieldHandler?
+    
 }
 
 // MARK: Seperator Types
@@ -53,6 +54,7 @@ fileprivate extension TextFieldSequenceFormatterManager {
         let nElementsPerGroup: Int
         let filledSequenceHandler: TextFieldHandler?
         let dischargedSequenceHandler: TextFieldHandler?
+        let didEndEditingHandler: TextFieldHandler?
         let separator: Seperator
     }
 }
@@ -86,25 +88,32 @@ extension TextFieldSequenceFormatterManager: UITextFieldDelegate {
         
         return true
     }
+    
+    public func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let value = dictionary[textField] else { return }
+        
+        value.didEndEditingHandler?(textField)
+    }
 }
 
 // MARK: - Public Functions
 extension TextFieldSequenceFormatterManager {
     public func setTextField(with entity: TextFieldSequenceFormatterEntity) {
         entity.textField.delegate = self
-        let value = TextFieldSequenceFormatterInternalModel(nElements: entity.nElements, nElementsPerGroup: entity.nElementsPerGroup, filledSequenceHandler: entity.filledSequenceHandler, dischargedSequenceHandler: entity.dischargedSequenceHandler, separator: entity.separator)
+        let value = TextFieldSequenceFormatterInternalModel(nElements: entity.nElements, nElementsPerGroup: entity.nElementsPerGroup, filledSequenceHandler: entity.filledSequenceHandler, dischargedSequenceHandler: entity.dischargedSequenceHandler, didEndEditingHandler: entity.didEndEditingHandler, separator: entity.separator)
         dictionary[entity.textField] = value
     }
 }
 
 // MARK: - TextFieldSequenceFormatterEntity
 public class TextFieldSequenceFormatterEntity {
-    init(textField: UITextField, nElements: Int, nElementsPerGroup: Int, filledSequenceHandler: TextFieldSequenceFormatterManager.TextFieldHandler?, dischargedSequenceHandler: TextFieldSequenceFormatterManager.TextFieldHandler?, separator: TextFieldSequenceFormatterManager.Seperator) {
+    init(textField: UITextField, nElements: Int, nElementsPerGroup: Int, filledSequenceHandler: TextFieldSequenceFormatterManager.TextFieldHandler?, dischargedSequenceHandler: TextFieldSequenceFormatterManager.TextFieldHandler?, didEndEditingHandler: TextFieldSequenceFormatterManager.TextFieldHandler?, separator: TextFieldSequenceFormatterManager.Seperator) {
         self.textField = textField
         self.nElements = nElements
         self.nElementsPerGroup = nElementsPerGroup
         self.filledSequenceHandler = filledSequenceHandler
         self.dischargedSequenceHandler = dischargedSequenceHandler
+        self.didEndEditingHandler = didEndEditingHandler
         self.separator = separator
     }
     
@@ -113,5 +122,6 @@ public class TextFieldSequenceFormatterEntity {
     let nElementsPerGroup: Int
     let filledSequenceHandler: TextFieldSequenceFormatterManager.TextFieldHandler?
     let dischargedSequenceHandler: TextFieldSequenceFormatterManager.TextFieldHandler?
+    let didEndEditingHandler: TextFieldSequenceFormatterManager.TextFieldHandler?
     let separator: TextFieldSequenceFormatterManager.Seperator
 }
